@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class Player implements Runnable
 {
-    public static final double STEP = 0.00001;
+    public static final double STEP = 0.00005;
     private Gson gson;
     private Socket socket;
     private PrintWriter out;
@@ -99,7 +99,7 @@ public class Player implements Runnable
     public void roam()
     {
         
-        double movement = STEP*2;
+        double movement = STEP;
         boolean westbound = false;
         while(true)
         {
@@ -108,13 +108,13 @@ public class Player implements Runnable
                 while(latitude+accuracy < north)
                 {
                     latitude += movement;
-                    updateLocation(100);
+                    updateLocation(250);
                 }
                 longitude -= movement;
                 while(latitude-accuracy > south)
                 {
                     latitude -= movement;
-                    updateLocation(100);
+                    updateLocation(250);
                 }
             }
             
@@ -123,13 +123,13 @@ public class Player implements Runnable
                 while(latitude+accuracy < north)
                 {
                     latitude += movement;
-                    updateLocation(100);
+                    updateLocation(250);
                 }
                 longitude += movement;
                 while(latitude-accuracy > south)
                 {
                     latitude -= movement;
-                    updateLocation(100);
+                    updateLocation(250);
                 }
             }
         }
@@ -216,7 +216,7 @@ public class Player implements Runnable
         
         if(isLobbyLeader)
         {
-            send("{\"ACTION\":\"CREATE\",\"LOCATION\":\"" + location + "\",\"SIZE\":\"0.0007\", \"ACCURACY\":0.00026}");
+            send("{\"ACTION\":\"CREATE\",\"LOCATION\":\"" + location + "\",\"SIZE\":\"0.0014\", \"ACCURACY\":0.00026}");
            
             try
             {
@@ -266,12 +266,12 @@ public class Player implements Runnable
             case 2:
             case 3:
             case 4:
-            case 5: confused(); break;
-            case 6:
-            case 7:
+            case 5: 
+            case 6: starPlayer(); break;
+            case 7: 
             case 8:
-            case 9: starPlayer(); break;
-            case 10: roam(); break;
+            case 9: roam(); break;
+            case 10: confused(); break;
             default: confused(); 
         }
         
@@ -286,7 +286,7 @@ public class Player implements Runnable
     
     public void updateLocation()
     {
-        updateLocation(1000);
+        updateLocation(500);
     }
     
     public void updateLocation(int sleepTime)
