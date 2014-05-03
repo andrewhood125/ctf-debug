@@ -177,8 +177,9 @@ public class Reader implements Runnable
     
     public void readLobbyID(JsonObject temp)
     {
+        
         JsonArray lobbies = temp.get("LOBBIES").getAsJsonArray();
-        JsonElement firstLobby = lobbies.get(0);
+        JsonElement firstLobby = lobbies.get(lobbies.size()-1);
         JsonElement lobbyElement = firstLobby.getAsJsonObject().get("LOBBY");
         player.lobbyID = lobbyElement.getAsString();
     }

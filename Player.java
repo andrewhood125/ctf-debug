@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class Player implements Runnable
 {
-    public static final double STEP = 0.0001;
+    public static final double STEP = 0.00001;
     private Gson gson;
     private Socket socket;
     private PrintWriter out;
@@ -99,7 +99,7 @@ public class Player implements Runnable
     public void roam()
     {
         
-        double movement = STEP;
+        double movement = STEP*2;
         boolean westbound = false;
         while(true)
         {
@@ -131,6 +131,33 @@ public class Player implements Runnable
                     latitude -= movement;
                     updateLocation(100);
                 }
+            }
+        }
+    }
+    
+    public void confused()
+    {
+        while(true)
+        {
+            // Randomly pick a direction
+            double direction = Math.random()*360;
+            if(direction < 90)
+            {
+                latitude += STEP;
+                longitude += STEP;
+                updateLocation();
+            } else if(direction < 180) {
+                latitude -= STEP;
+                longitude += STEP;
+                updateLocation();
+            } else if(direction < 270) {
+                latitude += STEP;
+                longitude -= STEP;
+                updateLocation();
+            } else if(direction < 180) {
+                latitude -= STEP;
+                longitude -= STEP;
+                updateLocation();
             }
         }
     }
@@ -231,10 +258,21 @@ public class Player implements Runnable
         getBases();
         
         Random rand = new Random();
-        switch(rand.nextInt(2))
+        switch(rand.nextInt(10))
         {
-            case 0: roam(); break;
-            case 1: starPlayer(); break;
+            
+            case 0: 
+            case 1: 
+            case 2:
+            case 3:
+            case 4:
+            case 5: confused(); break;
+            case 6:
+            case 7:
+            case 8:
+            case 9: starPlayer(); break;
+            case 10: roam(); break;
+            default: confused(); 
         }
         
         // Wait for any last incoming messages to be read.
@@ -248,7 +286,7 @@ public class Player implements Runnable
     
     public void updateLocation()
     {
-        updateLocation(500);
+        updateLocation(1000);
     }
     
     public void updateLocation(int sleepTime)
